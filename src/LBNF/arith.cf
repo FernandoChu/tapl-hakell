@@ -1,0 +1,8 @@
+ETrue. Exp ::= "true";
+EFalse. Exp ::= "false";
+ECond. Exp ::= "if" Exp "then" Exp "else" Exp;
+
+EZero. Exp ::= "0";
+ESucc. Exp ::= "succ" Exp;
+EPred. Exp ::= "pred" Exp;
+EIsZero. Exp ::= "iszero" Exp;
