@@ -41,7 +41,7 @@ library
       Lambda.Skel
       Lambda.Test
       Lib
-      TaplTypes
+      Types
   other-modules:
       Paths_tapl_haskell
   hs-source-dirs:

@@ -15,8 +15,8 @@ import           System.Environment             ( getArgs )
 import           System.Exit                    ( exitFailure
                                                 , exitSuccess
                                                 )
-import           TaplTypes
 import qualified Text.PrettyPrint.ANSI.Leijen  as PrettyDoc
+import           Types
 
 data Language = Arith
               | Lambda
