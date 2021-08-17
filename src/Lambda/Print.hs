@@ -139,11 +139,10 @@ instance Print Integer where
 instance Print Double where
   prt _ x = doc (shows x)
 
-instance Print Lambda.Abs.Exp where
+instance Print Lambda.Abs.Ident where
+  prt _ (Lambda.Abs.Ident i) = doc $ showString i
+instance Print Lambda.Abs.Term where
   prt i = \case
-    Lambda.Abs.ETrue -> prPrec i 0 (concatD [doc (showString "true")])
-    Lambda.Abs.EFalse -> prPrec i 0 (concatD [doc (showString "false")])
-    Lambda.Abs.ECond exp1 exp2 exp3 -> prPrec i 0 (concatD [doc (showString "if"), prt 0 exp1, doc (showString "then"), prt 0 exp2, doc (showString "else"), prt 0 exp3])
-    Lambda.Abs.EZero -> prPrec i 0 (concatD [doc (showString "0")])
-    Lambda.Abs.ESucc exp -> prPrec i 0 (concatD [doc (showString "succ"), prt 0 exp])
-    Lambda.Abs.EPred exp -> prPrec i 0 (concatD [doc (showString "pred"), prt 0 exp])
+    Lambda.Abs.TmVar id_ -> prPrec i 0 (concatD [prt 0 id_])
+    Lambda.Abs.TmAbs id_ term -> prPrec i 0 (concatD [doc (showString "("), doc (showString "lambda"), prt 0 id_, doc (showString "."), prt 0 term, doc (showString ")")])
+    Lambda.Abs.TmApp term1 term2 -> prPrec i 0 (concatD [prt 0 term1, prt 0 term2])

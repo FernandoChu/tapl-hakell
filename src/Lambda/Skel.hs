@@ -13,11 +13,12 @@ type Result = Err String
 failure :: Show a => a -> Result
 failure x = Left $ "Undefined case: " ++ show x
 
-transExp :: Lambda.Abs.Exp -> Result
-transExp x = case x of
-  Lambda.Abs.ETrue -> failure x
-  Lambda.Abs.EFalse -> failure x
-  Lambda.Abs.ECond exp1 exp2 exp3 -> failure x
-  Lambda.Abs.EZero -> failure x
-  Lambda.Abs.ESucc exp -> failure x
-  Lambda.Abs.EPred exp -> failure x
+transIdent :: Lambda.Abs.Ident -> Result
+transIdent x = case x of
+  Lambda.Abs.Ident string -> failure x
+
+transTerm :: Lambda.Abs.Term -> Result
+transTerm x = case x of
+  Lambda.Abs.TmVar ident -> failure x
+  Lambda.Abs.TmAbs ident term -> failure x
+  Lambda.Abs.TmApp term1 term2 -> failure x

@@ -6,7 +6,7 @@
 module Lambda.Par
   ( happyError
   , myLexer
-  , pExp
+  , pTerm
   ) where
 
 import Prelude
@@ -16,31 +16,27 @@ import Lambda.Lex
 
 }
 
-%name pExp Exp
+%name pTerm Term
 -- no lexer declaration
 %monad { Err } { (>>=) } { return }
 %tokentype {Token}
 %token
-  '0'     { PT _ (TS _ 1) }
-  'else'  { PT _ (TS _ 2) }
-  'false' { PT _ (TS _ 3) }
-  'if'    { PT _ (TS _ 4) }
-  'pred'  { PT _ (TS _ 5) }
-  'succ'  { PT _ (TS _ 6) }
-  'then'  { PT _ (TS _ 7) }
-  'true'  { PT _ (TS _ 8) }
+  '('      { PT _ (TS _ 1) }
+  ')'      { PT _ (TS _ 2) }
+  '.'      { PT _ (TS _ 3) }
+  'lambda' { PT _ (TS _ 4) }
+  L_Ident  { PT _ (TV $$)  }
 
 %%
 
+Ident :: { Lambda.Abs.Ident }
+Ident  : L_Ident { Lambda.Abs.Ident $1 }
 
-Exp :: { Lambda.Abs.Exp }
-Exp
-  : 'true' { Lambda.Abs.ETrue }
-  | 'false' { Lambda.Abs.EFalse }
-  | 'if' Exp 'then' Exp 'else' Exp { Lambda.Abs.ECond $2 $4 $6 }
-  | '0' { Lambda.Abs.EZero }
-  | 'succ' Exp { Lambda.Abs.ESucc $2 }
-  | 'pred' Exp { Lambda.Abs.EPred $2 }
+Term :: { Lambda.Abs.Term }
+Term
+  : Ident { Lambda.Abs.TmVar $1 }
+  | '(' 'lambda' Ident '.' Term ')' { Lambda.Abs.TmAbs $3 $5 }
+  | Term Term { Lambda.Abs.TmApp $1 $2 }
 
 {
 
